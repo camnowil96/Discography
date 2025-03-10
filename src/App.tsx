@@ -12,6 +12,9 @@ const App = () => {
       <div>
           <Modal />
       </div>
+      <div>
+          <BeeAnimation />
+      </div>
     </>
   )
 }

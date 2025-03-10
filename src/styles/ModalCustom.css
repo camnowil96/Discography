@@ -1,0 +1,34 @@
+.modal-content {
+  background-color: black !important; /* Change to your desired color */
+  border: none; /* Removes any unwanted borders */
+  color: white; /* Adjust text color if needed */
+}
+
+.modal-body {
+  background-color: black !important; /* Ensures the body matches */
+}
+
+.modal-header,
+.modal-footer {
+  background-color: black !important; /* Optional: Change header/footer color */
+  border: none; /* Removes the white border */
+  object-position: 15%;
+}
+
+.h1 {
+  color: white; 
+  text-align: center !important;
+  top: 10px !important;
+}
+
+.chevron-back {
+  position: relative; /* Allows precise positioning */
+  top: 10px !important; /* Moves it downward */
+  margin-left: 10px; /* Optional: Adjust horizontal position */
+  font-size: 2rem; /* Adjust size */
+  cursor: pointer; /* Makes it clickable */
+}
+
+.h3, .p {
+  text-align: center !important;
+}
