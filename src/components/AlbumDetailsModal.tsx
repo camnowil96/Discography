@@ -32,4 +32,3 @@ const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, title, r
 };
 
 export default AlbumDetailsModal;
-

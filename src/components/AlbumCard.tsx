@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import AlbumDetailsModal from "./AlbumDetailsModal"; // Import the new modal
 import "../styles/AlbumCard.css";
