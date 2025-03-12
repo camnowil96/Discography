@@ -1,33 +1,46 @@
-import React, { useState } from "react";
-import AlbumDetailsModal from "./AlbumDetailsModal"; // Import the new modal
-import "../styles/AlbumCard.css";
-import AudioPlayer from "..components/AudioPlayer"
+import React from "react";
+import "../styles/AlbumDetailsCard.css";
+import AudioPlayer from "../components/AudioPlayer";
 
-interface AlbumProps {
+interface AlbumDetailsProps {
   title: string;
   releaseYear: number;
   coverUrl: string;
   genre: string[];
   tracklist: string[];
+  audioSrc?: string;
 }
 
-const AlbumDetailsCard: React.FC<AlbumProps> = ({ title, releaseYear, coverUrl, genre, tracklist }) => { 
-
+const AlbumDetailsCard: React.FC<AlbumDetailsProps> = ({ 
+  title, 
+  releaseYear, 
+  coverUrl, 
+  genre, 
+  tracklist,
+  audioSrc = "/path/to/your/audio.mp3"
+}) => { 
   return (    
-      <div className="album-card">
+      <div className="album-details-card">
         <img src={coverUrl} alt={`${title} cover`} />
         <h3>{title}</h3>
         <p>{releaseYear}</p>
-        {genre && <p>{genre.join(", ")}</p>}
-        <AlbumDetailsModal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          title="Album Title"
-          releaseYear={2023}
-          coverUrl="/path/to/album-cover.jpg"
-          genre={["Rock", "Alternative"]}
-          audioSrc="/path/to/audio-track.mp3"
-        />
+        {genre && <p>{genre.join(", ")}</p>}  
+
+
+        <AudioPlayer 
+          audioSrc={audioSrc} 
+          coverUrl={coverUrl}
+          title={title}
+          albumDetails={`${releaseYear} • ${genre.join(", ")}`}
+         />     
+
+        <ul className="tracklist">
+        {tracklist.map((track, index) => (
+          <li key={index} className="track">
+            {track}
+          </li>
+        ))}
+      </ul>      
       </div>
   );
 };

@@ -1,29 +1,52 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 import { IoChevronBack } from "react-icons/io5";
+import AlbumDetailsCard from "../components/AlbumDetailsCard";
 import "../styles/ModalCustom.css";
+
 
 interface AlbumDetailsProps {
   show: boolean;
   onHide: () => void;
-  title: string;
-  releaseYear: number;
-  coverUrl: string;
-  genre?: string[];
 }
+const AlbumInfo = [
+  {title:'Dangerously in Love', releaseYear:2003, coverUrl:"https://beyalbumcovers.s3.us-east-1.amazonaws.com/Dangerously-in-Love.png", genre:['R&B, Pop, Hip Hop, Soul'], 
+   tracklist:[
+    "1. Crazy in Love",
+    "2. Naughty Girl",
+    "3. Baby Boy",
+    "4. Hip Hop Star",
+    "5. Be with You",
+    "6. Me, Myself and I",
+    "7. Yes",
+    "8. Signs",
+    "9. Speechless",
+    "10. That's How I Like It",
+    "11. The Closer I Get To You",
+    "12. Dangerously In Love 2",
+    "13. Beyoncé Interlude",
+    "14. Gift From Virgo",
+    "15. Daddy",
+   ]
+  }];
 
-const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, title, releaseYear, coverUrl, genre }) => {
+const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, }) => {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header>
         <IoChevronBack onClick={onHide} className="chevron-back" />
        </Modal.Header>
-      <Modal.Body>
-        <img src={coverUrl} alt={`${title} cover`} style={{ width: "100%", borderRadius: "10px", objectFit: 'cover' }} />
-        <h3 className="h3">{title}</h3>
-        <p className="p">Release Year: {releaseYear}</p>
-        {genre && <p>Genre: {genre.join(", ")}</p>}
+      <Modal.Body className="modal-details-body">
+        {AlbumInfo.map((album, index) => (
+          <AlbumDetailsCard
+          key={index}
+          title={album.title}
+          releaseYear={album.releaseYear}
+          coverUrl={album.coverUrl} 
+          genre={album.genre}
+          tracklist={album.tracklist}
+          />
+        ))}
       </Modal.Body>
       <Modal.Footer>
       </Modal.Footer>

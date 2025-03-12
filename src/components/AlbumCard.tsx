@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import AlbumDetailsModal from "./AlbumDetailsModal"; // Import the new modal
 import "../styles/AlbumCard.css";
+import "../styles/AlbumDetailsCard.css";
 
 interface AlbumProps {
   title: string;
@@ -25,11 +26,7 @@ const AlbumCard: React.FC<AlbumProps> = ({ title, releaseYear, coverUrl, genre }
       {/* Render the modal when the card is clicked */}
       <AlbumDetailsModal 
         show={modalShow} 
-        onHide={() => setModalShow(false)} 
-        title={title} 
-        releaseYear={releaseYear} 
-        coverUrl={coverUrl} 
-        genre={genre}
+        onHide={() => setModalShow(false)}
       />
     </>
   );

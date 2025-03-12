@@ -1,20 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-import ProgressBar from "./ProgressBar";
-import TimeInfo from "./TimeInfo";
-import TrackInfo from "./TrackInfo";
-import Controls from "./Controls";
+import ProgressBar from "../components/ProgressBar";
+import TimeInfo from "../components/TimeInfo";
+import TrackInfo from "../components/TrackInfo";
+import Controls from "../components/Controls";
 import "../styles/AudioPlayer.css";
 
 interface AudioPlayerProps {
   audioSrc: string;
-  imageUrl: string;
+  coverUrl: string;
   title: string;
   albumDetails: string;
 }
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   audioSrc,
-  imageUrl,
+  coverUrl,
   title,
   albumDetails
 }) => {
@@ -128,7 +128,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       
       {/* Track Information Component */}
       <TrackInfo 
-        imageUrl={imageUrl} 
+        imageUrl={coverUrl} 
         title={title} 
         albumDetails={albumDetails} 
       />
