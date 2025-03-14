@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/ProgressBar.css";
+import "../styles/AudioPlayer.css";
 
 interface ProgressBarProps {
   progress: number; // Percentage (0-100)

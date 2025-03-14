@@ -9,14 +9,14 @@ interface AudioPlayerProps {
   audioSrc: string;
   coverUrl: string;
   title: string;
-  albumDetails: string;
+  songTitle?: string;
 }
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   audioSrc,
   coverUrl,
   title,
-  albumDetails
+  songTitle
 }) => {
   // State
   const [isPlaying, setIsPlaying] = useState(false);
@@ -127,28 +127,30 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <audio ref={audioRef} src={audioSrc} preload="metadata" />
       
       {/* Track Information Component */}
-      <TrackInfo 
-        imageUrl={coverUrl} 
-        title={title} 
-        albumDetails={albumDetails} 
-      />
-      
+      <div className="top-section">
+        <TrackInfo 
+          imageUrl={coverUrl} 
+          songTitle={songTitle}
+          title={title} 
+        />
+
+        <Controls 
+          isPlaying={isPlaying} 
+          onPlayPause={togglePlayPause} 
+        />
+      </div>
       {/* Progress Bar Component with Click Handling */}
       <div ref={progressContainerRef} onClick={changeProgress}>
         <ProgressBar progress={progress} />
       </div>
       
       {/* Time Information Component */}
-      <TimeInfo 
-        currentTime={formatTime(currentTime)} 
-        duration={formatTime(duration)} 
-      />
-      
-      {/* Controls Component */}
-      <Controls 
-        isPlaying={isPlaying} 
-        onPlayPause={togglePlayPause} 
-      />
+      <div className="time-info">
+        <TimeInfo 
+          currentTime={formatTime(currentTime)} 
+          duration={formatTime(duration)} 
+        />
+      </div>      
     </div>
   );
 };

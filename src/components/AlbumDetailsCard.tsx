@@ -9,9 +9,11 @@ interface AlbumDetailsProps {
   genre: string[];
   tracklist: string[];
   audioSrc?: string;
+  songTitle?: string;
 }
 
 const AlbumDetailsCard: React.FC<AlbumDetailsProps> = ({ 
+  songTitle,
   title, 
   releaseYear, 
   coverUrl, 
@@ -23,15 +25,15 @@ const AlbumDetailsCard: React.FC<AlbumDetailsProps> = ({
       <div className="album-details-card">
         <img src={coverUrl} alt={`${title} cover`} />
         <h3>{title}</h3>
-        <p>{releaseYear}</p>
-        {genre && <p>{genre.join(", ")}</p>}  
+        <p>{`${releaseYear} | ${genre.join(", ")}`}</p>
+        
 
 
         <AudioPlayer 
           audioSrc={audioSrc} 
           coverUrl={coverUrl}
+          songTitle={songTitle}
           title={title}
-          albumDetails={`${releaseYear} • ${genre.join(", ")}`}
          />     
 
         <ul className="tracklist">

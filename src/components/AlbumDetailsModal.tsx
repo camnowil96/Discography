@@ -10,7 +10,7 @@ interface AlbumDetailsProps {
   onHide: () => void;
 }
 const AlbumInfo = [
-  {title:'Dangerously in Love', releaseYear:2003, coverUrl:"https://beyalbumcovers.s3.us-east-1.amazonaws.com/Dangerously-in-Love.png", genre:['R&B, Pop, Hip Hop, Soul'], 
+  {title:'Dangerously in Love', songTitle: 'Crazy in Love', releaseYear:2003, coverUrl:"https://beyalbumcovers.s3.us-east-1.amazonaws.com/Dangerously-in-Love.png", genre:['R&B, Pop, Hip Hop, Soul'], 
    tracklist:[
     "1. Crazy in Love",
     "2. Naughty Girl",
@@ -40,11 +40,12 @@ const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, }) => {
         {AlbumInfo.map((album, index) => (
           <AlbumDetailsCard
           key={index}
-          title={album.title}
+          title={album.title}          
           releaseYear={album.releaseYear}
           coverUrl={album.coverUrl} 
           genre={album.genre}
           tracklist={album.tracklist}
+          songTitle={album.songTitle}
           />
         ))}
       </Modal.Body>
