@@ -1,31 +1,33 @@
-import React, {useMemo} from 'react'
+import React, { useEffect, useState} from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
 import Carousel from './components/Carousel'
-import Grid from './components/AlbumGrid'
-import BeeAnimation from './components/BeeAnimation'
 import Modal from './components/Modal'
+import axios from 'axios'
 
-const images = [
-  "src/CarouselPics/bey03.png",
-  "src/CarouselPics/bey04.png",
-  "src/CarouselPics/bey06.png",
-  "src/CarouselPics/bey07.png",
-  "src/CarouselPics/bey08.jpg",
-  "src/CarouselPics/bey09.png",
-  "src/CarouselPics/bey10.png",
-  "src/CarouselPics/bey11.png",
-  "src/CarouselPics/bey13.png",
-  "src/CarouselPics/bey16.png",
-  "src/CarouselPics/bey18.png",
-  "src/CarouselPics/bey19.png",
-  "src/CarouselPics/beyandblue.jpg",
-  "src/CarouselPics/bey24.png"
-];
 
-const App= () => {
+const App: React.FC = () => {
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/get_images", {
+          params: { prefix: "carousel" }  
+        });
+        setImages(response.data);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages(); // Call the function
+
+    return () => {}; // Empty cleanup function to satisfy TypeScript
+  }, []);
+
   return (
-    <>   
-      <div>         
+    <>
+      <div>
         <Carousel images={images} />
       </div>
       <div>
