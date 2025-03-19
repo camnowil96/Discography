@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/AudioPlayer.css";
 
 interface TimeInfoProps {
   currentTime: string; // e.g., "2:45"

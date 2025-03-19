@@ -1,34 +1,97 @@
 import React, { useState } from "react";
-import AlbumDetailsModal from "./AlbumDetailsModal"; // Import the new modal
-import "../styles/AlbumCard.css";
-import AudioPlayer from "..components/AudioPlayer"
+import { motion } from "framer-motion";
+import "../styles/AlbumDetailsCard.css";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+import "../styles/CustomAudioPlayer.css";
 
-interface AlbumProps {
+interface AlbumDetailsProps {
   title: string;
   releaseYear: number;
   coverUrl: string;
   genre: string[];
   tracklist: string[];
+  audioSrc?: string;
+  songTitle?: string;
+  index?: number;
 }
 
-const AlbumDetailsCard: React.FC<AlbumProps> = ({ title, releaseYear, coverUrl, genre, tracklist }) => { 
-
-  return (    
-      <div className="album-card">
-        <img src={coverUrl} alt={`${title} cover`} />
+const AlbumDetailsCard: React.FC<AlbumDetailsProps> = ({
+  songTitle,
+  title,
+  releaseYear,
+  coverUrl,
+  genre,
+  tracklist,
+  audioSrc,
+  index   
+ 
+}) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Content animation variants
+  const contentVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        delay: 0.15,
+        duration: 0.4
+      }
+    },
+    exit: { 
+      opacity: 0,
+      transition: {
+        duration: 0.1  // Make this much faster
+      }
+    }
+  };
+  
+  return (
+    <div className="album-details-card">
+      <motion.img 
+        layoutId={`album-cover-${title}-${index}`} // Ensure it matches AlbumCard
+        src={coverUrl} 
+        alt={`${title} cover`} 
+        className="album-image"
+        transition={{ type: "spring", 
+          stiffness: 300, 
+          damping: 25, 
+          duration: 0.5 }}
+      />
+      
+      <motion.div
+        variants={contentVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
         <h3>{title}</h3>
-        <p>{releaseYear}</p>
-        {genre && <p>{genre.join(", ")}</p>}
-        <AlbumDetailsModal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          title="Album Title"
-          releaseYear={2023}
-          coverUrl="/path/to/album-cover.jpg"
-          genre={["Rock", "Alternative"]}
-          audioSrc="/path/to/audio-track.mp3"
+        <p>{`${releaseYear} | ${genre.join(", ")}`}</p>
+        
+        <AudioPlayer 
+          className="custom"
+          autoPlay
+          src={audioSrc || "src/AudioFiles/Beyoncé - Crazy In Love (Official Audio) ft. JAY-Z.mp4"}
+          loop={true}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          header={
+            <div className={`scrolling-title ${isPlaying ? 'playing' : 'paused'}`}>
+              <span>{songTitle} </span>
+            </div>
+          }
         />
-      </div>
+        
+        <ul className="tracklist">
+          {tracklist.map((track, index) => (
+            <li key={index} className="track">
+              {track}
+            </li>
+          ))}
+        </ul>
+      </motion.div>
+    </div>
   );
 };
 

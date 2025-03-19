@@ -1,0 +1,44 @@
+.custom {
+  background-color: rgba(5, 132, 216, 0.288) !important;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  
+  padding-top: 8px;
+  padding-bottom: 6px;
+  top: 5%;
+}
+
+.scrolling-title {
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 380px; /* Adjust to match container */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2px;  
+}
+
+.scrolling-title span {
+  display: inline-block;
+  position: relative;
+  animation: none;
+}
+
+
+/* Start in the center when paused */
+.scrolling-title.paused span {
+  animation: none;
+  transform: translateX(0);
+}
+
+/* Moves right first, loops smoothly */
+.scrolling-title.playing span {
+  animation: scroll-text 15s linear infinite;
+}
+
+@keyframes scroll-text {
+  100% { transform: translateX(180%); }
+  0% { transform: translateX(-180%); }
+}

@@ -1,11 +1,11 @@
 .modal-content {
-  background-color: black !important; /* Change to your desired color */
+  background-color: black !important; 
   border: none; /* Removes any unwanted borders */
   color: white; /* Adjust text color if needed */
 }
 
 .modal-body {
-  background-color: black !important; /* Ensures the body matches */
+  background-color: black !important; 
 }
 
 .modal-header,
@@ -15,6 +15,26 @@
   object-position: 15%;
 }
 
+.modal-details-content {
+  background-color: black !important; 
+  border: none; /* Removes any unwanted borders */
+  color: white; /* Adjust text color if needed */
+}
+
+.modal-details-body {
+  background-color: black !important; 
+  display: flex;
+  justify-content: center; /* Centers the content */
+  align-items: center;
+  width: 100%;
+}
+
+.modal-details-header,
+.modal-details-footer {
+  background-color: black !important; /* Optional: Change header/footer color */
+  border: none; /* Removes the white border */
+  object-position: 15%;
+}
 .h1 {
   color: white; 
   text-align: center !important;
@@ -32,3 +52,4 @@
 .h3, .p {
   text-align: center !important;
 }
+

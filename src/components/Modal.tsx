@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
+import GlowButton from "../components/button.tsx";
 import Modal from "react-bootstrap/Modal";
 import AlbumGrid from "../components/AlbumGrid";
 import "../styles/ModalCustom.css";
 import { IoChevronBack } from "react-icons/io5";
+import "../styles/Button.css";
 
 interface ViewAlbumsProps {
   show: boolean;
@@ -31,13 +32,11 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Button type="button" onClick={() => setModalShow(true)} disabled={false} className="btn btn-primary four">
-        Launch modal with grid
-      </Button>
-
+      <GlowButton onClick={() => setModalShow(true)}/>          
       <ViewAlbums show={modalShow} onHide={() => setModalShow(false)} />
     </>
   );
 };
 
 export default App;
+

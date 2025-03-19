@@ -30,7 +30,8 @@ const AlbumGrid: React.FC = () => {
           key={index}
           title={album.title}
           releaseYear={album.releaseYear}
-          coverUrl={album.coverUrl}          
+          coverUrl={album.coverUrl}
+          index={index}          
         />
       ))}
     </div>
