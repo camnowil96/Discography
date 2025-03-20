@@ -20,6 +20,42 @@ resource "aws_s3_object" "folders" {
   key    = "${each.value}"
 }
 
+resource "aws_s3_bucket_policy" "discography" {
+  bucket = aws_s3_bucket.bey_discography.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+        {
+            Effect: "Allow",
+            Principal: "*",
+            Action: "s3:GetObject",
+            Resource: "${aws_s3_bucket.bey_discography.arn}/*"
+        }
+    ]
+  })
+}
+
+resource "aws_s3_bucket_public_access_block" "discography_public" {
+  bucket = aws_s3_bucket.bey_discography.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_cors_configuration" "discography_cors" {
+  bucket = aws_s3_bucket.bey_discography.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET"]
+    allowed_origins = ["*"]
+    expose_headers  = []
+    max_age_seconds = 3000
+  }
+}
+
 resource "null_resource" "upload_data" {
   triggers = {
     script_hash = filemd5("/home/camnowil96/Documents/discography/backend/app/upload_data.py")
