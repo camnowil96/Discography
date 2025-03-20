@@ -130,9 +130,9 @@ if __name__ == "__main__":
     json_file = "/home/camnowil96/Documents/Discography/src/albums.json"
     
     folder_mappings = {
-        "albumcovers": "/home/camnowil96/Documents/discography/src/Album_Cover_Art", 
-        "music": "/home/camnowil96/Documents/discography/src/AudioFiles",
-        "carousel": "/home/camnowil96/Documents/discography/src/CarouselPics"  
+        "albumcovers": "/home/camnowil96/Documents/Discography/src/Album_Cover_Art", 
+        "music": "/home/camnowil96/Documents/Discography/src/AudioFiles",
+        "carousel": "/home/camnowil96/Documents/Discography/src/CarouselPics"  
     }
 
     # Process album data

@@ -20,9 +20,9 @@ const App: React.FC = () => {
       }
     };
 
-    fetchImages(); // Call the function
+    fetchImages(); 
 
-    return () => {}; // Empty cleanup function to satisfy TypeScript
+    return () => {}; 
   }, []);
 
   return (

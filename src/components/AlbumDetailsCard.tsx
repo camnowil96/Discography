@@ -72,7 +72,7 @@ const AlbumDetailsCard: React.FC<AlbumDetailsProps> = ({
         <AudioPlayer 
           className="custom"
           autoPlay
-          src={audioSrc || "src/AudioFiles/Beyoncé - Crazy In Love (Official Audio) ft. JAY-Z.mp4"}
+          src={audioSrc}
           loop={true}
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
@@ -82,8 +82,8 @@ const AlbumDetailsCard: React.FC<AlbumDetailsProps> = ({
             </div>
           }
         />
-        
-        <ul className="tracklist">
+         
+         <ul className="tracklist">
           {tracklist.map((track, index) => (
             <li key={index} className="track">
               {track}

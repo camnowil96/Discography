@@ -33,6 +33,9 @@ resource "aws_s3_bucket_policy" "discography" {
         }
     ]
   })
+    depends_on = [
+    aws_s3_bucket_public_access_block.discography_public    
+  ]
 }
 
 resource "aws_s3_bucket_public_access_block" "discography_public" {

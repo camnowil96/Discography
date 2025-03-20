@@ -64,29 +64,36 @@ def read_root():
 
 @app.get("/albums", response_model=List[Albums])
 async def get_albums():
-	try: 
+	try:
 		response = table.scan()
-		items = response.get ('Items', [])
 
-		albums = [Albums(**item) for item in items]
-
-		return albums
+		if 'Items' in response:
+			albums = [EachAlbum(**item) for item in response['Items']]
+			sorted_albums = sorted(albums, key=lambda x: x.releaseYear)  # Sort by releaseYear
+			return sorted_albums
+		else:
+			return []
 	except Exception as e:
 		return {"error": str(e)}
 
 
 @app.get("/album/{title}", response_model=EachAlbum)
 async def get_albumdetails(title: str):
-	try: 
-		response = table.get_item(Key={'title': title})
-		
-		if 'Item' in response:
-			album = EachAlbum(**response['Item'])
-			return album
-		else:
-			return {"error": "Album not found"}
-	except Exception as e:
-		return {"error": str(e)}
+    try:
+        response = table.get_item(Key={'title': title})
+        if 'Item' in response:
+            item = response['Item']
+            
+            # If tracklist is a single string, split it into an array
+            if item.get('tracklist') and len(item.get('tracklist')) == 1 and isinstance(item['tracklist'][0], str) and ',' in item['tracklist'][0]:
+                item['tracklist'] = [track.strip() for track in item['tracklist'][0].split(',')]
+            
+            album = EachAlbum(**item)
+            return album
+        else:
+            return {"error": "Album not found"}
+    except Exception as e:
+        return {"error": str(e)}
 
 @app.get("/get_images", response_model=List[str])
 async def get_images(prefix: str = Query(..., description="carousel")):

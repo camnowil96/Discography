@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { IoChevronBack } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
 import AlbumDetailsCard from "./AlbumDetailsCard";
+import "../styles/AlbumDetailsCard.css";
+import axios from "axios";
 import "../styles/ModalCustom.css";
 
 interface AlbumData {
@@ -10,44 +12,45 @@ interface AlbumData {
   releaseYear: number;
   coverUrl: string;
   genre: string[];
+  tracklist: string[];
+  songTitle: string;
+  audioSrc: string;
   index: number;
 }
 
 interface AlbumDetailsProps {
   show: boolean;
   onHide: () => void;
-  selectedAlbum?: AlbumData;
+  selectedAlbum?: { 
+    title: string; 
+    releaseYear: number; 
+    coverUrl: string; 
+    genre: string[]; 
+    index: number; 
+  };
+  
 }
-
-const AlbumInfo = [
-  {
-    title: 'Dangerously in Love',
-    songTitle: 'Crazy in Love ft. JAY-Z',
-    releaseYear: 2003,
-    coverUrl: "https://beyalbumcovers.s3.us-east-1.amazonaws.com/Dangerously-in-Love.png",
-    genre: ['R&B, Pop, Hip Hop, Soul'],
-    tracklist: [
-      "1 Crazy in Love",
-      "2 Naughty Girl",
-      "3 Baby Boy",
-      "4 Hip Hop Star",
-      "5 Be with You",
-      "6 Me, Myself and I",
-      "7 Yes",
-      "8 Signs",
-      "9 Speechless",
-      "10 That's How I Like It",
-      "11 The Closer I Get To You",
-      "12 Dangerously In Love 2",
-      "13 Beyoncé Interlude",
-      "14 Gift From Virgo",
-      "15 Daddy",
-    ]
-  }
-];
 
 const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, selectedAlbum }) => {
   const [shouldRenderContent, setShouldRenderContent] = useState(true);
+  const [albumDetails, setAlbumDetails] = useState<AlbumData | null>(null);
+
+  useEffect(() => {
+    const fetchAlbumDetails = async () => {
+      if (selectedAlbum?.title) {
+        try {
+          const response = await axios.get(`http://localhost:8000/album/${selectedAlbum.title}`);
+          setAlbumDetails(response.data);  // Assuming response.data has album details
+        } catch (error) {
+          console.error("Error fetching album details:", error);
+        }
+      }
+    };
+
+    if (show && selectedAlbum) {
+      fetchAlbumDetails();
+    }
+  }, [show, selectedAlbum]);
 
   const handleClose = () => {
     setShouldRenderContent(false); // Instantly remove content
@@ -57,10 +60,6 @@ const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, selected
     }, 150);
   };
 
-  const albumDetails = selectedAlbum
-    ? AlbumInfo.find(album => album.title === selectedAlbum.title) || AlbumInfo[0]
-    : AlbumInfo[0];
-
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.95 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
@@ -69,7 +68,7 @@ const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, selected
 
   return (
     <AnimatePresence>
-      {show && (
+      {show && albumDetails && (
         <Modal
           show={show}
           onHide={handleClose}
@@ -96,6 +95,7 @@ const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, selected
                   genre={albumDetails.genre}
                   tracklist={albumDetails.tracklist}
                   songTitle={albumDetails.songTitle}
+                  audioSrc={albumDetails.audioSrc}
                   index={selectedAlbum?.index}
                 />
               </Modal.Body>
