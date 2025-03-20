@@ -2,17 +2,36 @@ import boto3
 import os
 import logging
 import json
+import mimetypes
 from botocore.exceptions import ClientError
 
 # Function definitions
 def upload_file(file_name, bucket, folder, object_name=None):
-    """Upload a file to an S3 bucket."""
+    """Upload a file to an S3 bucket with appropriate content type and cache control."""
     if object_name is None:
         object_name = f"{folder}/{os.path.basename(file_name)}"
+    
+    # Determine content type based on file extension
+    content_type, _ = mimetypes.guess_type(file_name)
+    if content_type is None:
+        # Default to binary if type cannot be determined
+        content_type = 'application/octet-stream'
+    
+    # Set cache control (one week)
+    cache_control = "max-age=604800"
+    
     try:
         s3_client = boto3.client("s3")
-        s3_client.upload_file(file_name, bucket, object_name)
-        logging.info(f"Uploaded {file_name} to {bucket}/{object_name}")
+        s3_client.upload_file(
+            file_name, 
+            bucket, 
+            object_name,
+            ExtraArgs={
+                'ContentType': content_type,
+                'CacheControl': cache_control
+            }
+        )
+        logging.info(f"Uploaded {file_name} to {bucket}/{object_name} with type {content_type}")
     except ClientError as e:
         logging.error(f"Error uploading {file_name} to S3: {e}")
         raise
@@ -108,7 +127,7 @@ if __name__ == "__main__":
     table = dynamodb_client.Table("discography")  
     bucket_name = "bey-discography-cnw"
     s3_folders = ["albumcovers", "music", "carousel"]  
-    json_file = "/home/camnowil96/Documents/discography/src/albums.json"
+    json_file = "/home/camnowil96/Documents/Discography/src/albums.json"
     
     folder_mappings = {
         "albumcovers": "/home/camnowil96/Documents/discography/src/Album_Cover_Art", 
@@ -117,7 +136,6 @@ if __name__ == "__main__":
     }
 
     # Process album data
-    process_album_data(json_file, table, bucket_name, s3_folders)
     process_album_data(json_file, table, bucket_name, s3_folders)
 
     # Upload carousel photos
