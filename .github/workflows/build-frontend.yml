@@ -33,5 +33,6 @@ jobs:
       - name: Build, Tag, and Push Docker Image
         id: build-and-push
         run: |
+          cd frontend
           docker build -t discography/frontend .
           docker push 051826710466.dkr.ecr.us-east-1.amazonaws.com/discography/frontend:latest
