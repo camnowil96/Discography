@@ -1,9 +1,6 @@
 name: Build frontend image and push to AWS ECR
 on:
-  push:
-    paths:
-      - "frontend/**" # Trigger the workflow when changes are made to files in the 'frontend' directory
-    branches: master
+  workflow_dispatch:
 
 jobs:
   docker:
