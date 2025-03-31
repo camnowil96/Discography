@@ -1,6 +1,6 @@
 name: Deploy infrastructure, build backend image, and push to AWS ECR
 on:
-  push:
+  pull_request:
     paths:
       - "backend/**" # Trigger the workflow when changes are made to files in the 'backend' directory
     branches:

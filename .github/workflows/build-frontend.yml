@@ -3,8 +3,7 @@ on:
   push:
     paths:
       - "frontend/**" # Trigger the workflow when changes are made to files in the 'frontend' directory
-    branches:
-      - main
+    branches: -master
 
 permissions:
   contents: read

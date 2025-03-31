@@ -1,9 +1,0 @@
-FROM node:23.10.0
-
-ENV:
-
-RUN mkdir -p /home/frontend
-
-COPY . /home/camnowil96/Documents/Discography/src
-
-CMD["node","server.js"]
