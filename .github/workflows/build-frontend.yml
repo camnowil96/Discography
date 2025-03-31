@@ -2,13 +2,13 @@ name: Build frontend image and push to AWS ECR
 on:
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
 jobs:
   docker:
     name: "Build and Push Docker Image to ECR"
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
