@@ -1,0 +1,43 @@
+name: Build frontend image and push to AWS ECR
+on:
+  push:
+    paths:
+      - "frontend/**" # Trigger the workflow when changes are made to files in the 'frontend' directory
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  docker:
+    name: "Build and Push Docker Image to ECR"
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::051826710466:role/GitHubAction_AssumeRole
+          aws-region: aws-region-1
+
+      # Log in to Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Build, tag, and push the Docker image to Amazon ECR
+      - name: Build, Tag, and Push Docker Image
+        id: build-and-push
+        env:
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY_ALIAS: discography
+          REPOSITORY: camnowil96/discography_frontend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
