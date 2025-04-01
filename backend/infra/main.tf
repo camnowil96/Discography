@@ -76,7 +76,7 @@ resource "null_resource" "upload_data" {
   }
 
   provisioner "local-exec" {
-    command = "python3 /home/camnowil96/Documents/Discography/backend/app/upload_data.py"
+    command = "python3 ../backend/app/upload_data.py"
   }
 
   depends_on = [
