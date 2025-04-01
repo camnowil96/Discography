@@ -32,7 +32,11 @@ jobs:
       # Build, tag, and push the Docker image to Amazon ECR
       - name: Build, Tag, and Push Docker Image
         id: build-and-push
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: frontend
+          IMAGE_TAG: latest
         run: |
           cd frontend
-          docker build -t discography/frontend .
-          docker push 051826710466.dkr.ecr.us-east-1.amazonaws.com/discography/frontend:latest
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
