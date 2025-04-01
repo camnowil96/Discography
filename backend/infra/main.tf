@@ -1,12 +1,13 @@
 # The configuration for the `remote` backend.
-terraform {
-  backend "remote" {         
-    organization = "camnowil96"
-         
-    workspaces {
-      name = "arm-aws-ecs"
-    }
-  }
+terraform { 
+  cloud { 
+    
+    organization = "camnowil96" 
+
+    workspaces { 
+      name = "arm-aws-ecr" 
+    } 
+  } 
 }
 
 resource "aws_dynamodb_table" "discography" {
