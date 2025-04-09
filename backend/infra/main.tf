@@ -13,18 +13,6 @@ resource "aws_s3_bucket" "remote_backend"{
   }
 }
 
-resource "aws_s3_bucket_versioning" "versioning" {
-    bucket = "aws_s3_bucket.remote_backend.id"    
-    versioning_configuration {
-      status = "Enabled"
-  }
-}
-
-resource "aws_s3_object" "example" {
-  bucket = "aws_s3_bucket_versioning.versioning.bucket"
-  source = ""
-}
-
 resource "aws_dynamodb_table" "tf_state_lock" {
   attribute {
     name = "LockID"
