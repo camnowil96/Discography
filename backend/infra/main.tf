@@ -18,7 +18,10 @@ resource "aws_s3_bucket_versioning" "versioning" {
     versioning_configuration {
       status = "Enabled"
   }
+
+  depends_on = "aws_s3_bucket.remote_backend.id"  
 }
+
 resource "aws_dynamodb_table" "tf_state_lock" {
   attribute {
     name = "LockID"
