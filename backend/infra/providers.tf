@@ -7,6 +7,5 @@ terraform {
   }
 }
 provider "aws" {
-  profile ="camnowil96admin"
   region = "us-east-1"
 }
