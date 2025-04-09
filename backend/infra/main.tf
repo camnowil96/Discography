@@ -14,10 +14,11 @@ resource "aws_s3_bucket" "remote_backend"{
 }
 
 resource "aws_s3_bucket_versioning" "versioning" {
-    bucket = "aws_s3_bucket.remote_backend.id"
-    enabled = true
-
+    bucket = "aws_s3_bucket.remote_backend.id"    
+    versioning_configuration {
+      status = "Enabled"
   }
+}
 resource "aws_dynamodb_table" "tf_state_lock" {
   attribute {
     name = "LockID"
@@ -93,7 +94,7 @@ resource "aws_s3_bucket_cors_configuration" "discography_cors" {
 
 resource "null_resource" "upload_data" {
   triggers = {
-    script_hash = filemd5("/backend/app/upload_data.py")
+    script_hash = filemd5("../backend/app/upload_data.py")
   }
 
   provisioner "local-exec" {
