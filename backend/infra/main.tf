@@ -5,14 +5,6 @@ terraform {
   }
 }
 
-resource "aws_s3_bucket" "remote_backend"{
-  bucket = "discography-terraform-sf"
-  
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-
 resource "aws_dynamodb_table" "tf_state_lock" {
   attribute {
     name = "LockID"
