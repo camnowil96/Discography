@@ -20,7 +20,7 @@ resource "aws_s3_bucket_versioning" "versioning" {
   }
 
   depends_on = [
-    aws_s3_bucket.remote_backend.id 
+    aws_s3_bucket.remote_backend.discography-terraform-sf
   ] 
 }
 
