@@ -7,15 +7,17 @@ terraform {
 
 resource "aws_s3_bucket" "remote_backend"{
   bucket = "discography-terraform-sf"
-
-  versioning {
-    enabled = true
-  }
+  
   lifecycle {
     prevent_destroy = true
   }
 }
 
+resource "aws_s3_bucket_versioning" "versioning" {
+    bucket = "aws_s3_bucket.remote_backend.id"
+    enabled = true
+
+  }
 resource "aws_dynamodb_table" "tf_state_lock" {
   attribute {
     name = "LockID"
@@ -91,7 +93,7 @@ resource "aws_s3_bucket_cors_configuration" "discography_cors" {
 
 resource "null_resource" "upload_data" {
   triggers = {
-    script_hash = filemd5("/home/camnowil96/Documents/Discography/backend/app/upload_data.py")
+    script_hash = filemd5("/backend/app/upload_data.py")
   }
 
   provisioner "local-exec" {
