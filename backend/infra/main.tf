@@ -94,11 +94,11 @@ resource "aws_s3_bucket_cors_configuration" "discography_cors" {
 
 resource "null_resource" "upload_data" {
   triggers = {
-    script_hash = filemd5("../backend/app/upload_data.py")
+    script_hash = filemd5("../app/upload_data.py")
   }
 
   provisioner "local-exec" {
-    command = "python3 ../backend/app/upload_data.py"
+    command = "python3 ../app/upload_data.py"
   }
 
   depends_on = [
