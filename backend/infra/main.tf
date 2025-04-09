@@ -11,6 +11,22 @@ resource "aws_s3_bucket" "remote_backend"{
   versioning {
     enabled = true
   }
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "aws_dynamodb_table" "tf_state_lock" {
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key  = "LockID"
+  name = "discography-terraform-sf"
+  tags = {
+    app = "terraform"
+  }
 }
 resource "aws_dynamodb_table" "discography" {
   name           = "discography"
