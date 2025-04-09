@@ -127,12 +127,12 @@ if __name__ == "__main__":
     table = dynamodb_client.Table("discography")  
     bucket_name = "bey-discography-cnw"
     s3_folders = ["albumcovers", "music", "carousel"]  
-    json_file = "../app/backend/albums.json"
+    json_file = "../app/albums.json"
     
     folder_mappings = {
-        "albumcovers": "../app/backend/Album_Cover_Art", 
-        "music": "../app/backend/AudioFiles",
-        "carousel": "../app/backend/CarouselPics"  
+        "albumcovers": "../app/Album_Cover_Art", 
+        "music": "../app/AudioFiles",
+        "carousel": "../app/CarouselPics"  
     }
 
     # Process album data
