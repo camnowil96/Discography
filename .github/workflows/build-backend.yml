@@ -40,9 +40,8 @@ jobs:
         run: |
           cd backend/infra
           pwd
-          ls -la
+          ls -a
           terraform init
-
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
         run: terraform fmt -check
