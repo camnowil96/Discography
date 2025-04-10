@@ -1,6 +1,8 @@
 name: Build frontend image and push to AWS ECR
 on:
-  workflow_dispatch:
+  push:
+    paths:
+      - "frontend/**"
 
 permissions:
   id-token: write
