@@ -2,3 +2,6 @@ Dockerfile
 node_modules/
 README.md
 ./node_modules/
+/node_modules
+**/node_modules
+node_modules

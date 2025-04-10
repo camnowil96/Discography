@@ -1,22 +1,34 @@
-FROM node:23-alpine3.20
+# Build stage
+FROM node:23-alpine3.20 AS build_image
+WORKDIR /app/react-app
 
-#working directory within the image - creates app folder if it doesn't exist
-WORKDIR /app/
-
-#copies dependencies from build context (local directory) into working directory
+# Copy package files and install all dependencies (including dev dependencies)
 COPY package*.json ./
-
-#installs dependencies
 RUN npm install
 
-#copies remaining files from build context (local directory) into working directory
+# Copy remaining files and build
 COPY . .
+RUN npm run build
 
-# Build the React app
-RUN npm run build 
+# Production stage
+FROM node:23-alpine3.20 AS production_image
+WORKDIR /app/react-app
 
-# Expose the port Vite uses
-EXPOSE 4173 
+# Set environment to development to ensure dev dependencies are installed
+ENV NODE_ENV=development
+
+# Copy package files first
+COPY package*.json ./
+
+# Install dependencies including dev dependencies explicitly
+RUN npm install --include=dev
+
+# Copy the build output and config files needed for preview
+COPY --from=build_image /app/react-app/dist ./dist
+COPY vite.config.ts ./
+
+# Expose the Vite preview port
+EXPOSE 4173
 
 # Start the app using Vite's preview mode
 CMD ["npm", "run", "preview"]

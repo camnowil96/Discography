@@ -1,4 +1,4 @@
-FROM python:3.12-alpine
+FROM python:3.13-alpine
 
 #working directory within the image - creates backend folder if it doesn't exist
 WORKDIR /app/
