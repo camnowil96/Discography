@@ -12,5 +12,8 @@ RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 #copies local backend directory into backend directory
 COPY . .
 
+#exposes port 8000
+EXPOSE 8000
+
 #starts fastapi and exposes port 8000
-CMD ["fastapi", "run", "app/main.py", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0"]
