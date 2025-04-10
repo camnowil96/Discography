@@ -76,7 +76,7 @@ async def get_albumdetails(title: str):
         if 'Item' in response:
             item = response['Item']
             
-            # If tracklist is a single string, split it into an array
+            # If tracklist is a single string, split it into an array..
             if item.get('tracklist') and len(item.get('tracklist')) == 1 and isinstance(item['tracklist'][0], str) and ',' in item['tracklist'][0]:
                 item['tracklist'] = [track.strip() for track in item['tracklist'][0].split(',')]
             
