@@ -180,7 +180,7 @@ resource "aws_route_table" "route_table" {
   }
 
   depends_on = [
-    aws_vpc.main.id
+    aws_vpc.main
   ]
 }
 
