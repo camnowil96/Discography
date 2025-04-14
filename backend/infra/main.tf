@@ -133,3 +133,154 @@ resource "aws_iam_role_policy_attachment" "attach_s3_dynamodb_policy" {
   role       = aws_iam_role.s3_dynamodb_role.name
   policy_arn = aws_iam_policy.s3_dynamodb_policy.arn
 }
+
+# Create VPC
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  enable_dns_hostnames = true
+}
+
+# Create subnets 
+resource "aws_subnet" "subnet_1" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-east-2a"
+  map_public_ip_on_launch = true  
+}
+
+resource "aws_subnet" "subnet_2" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-east-2b"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_subnet" "subnet_3" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-east-2c"
+  map_public_ip_on_launch = true
+}
+
+#create internet gateway
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+}
+#create route table and routes 
+resource "aws_route_table" "route_table" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+  route {
+    cidr_block = "10.0.0.0/16"
+    gateway_id = "local"
+  }
+
+  depends_on = [
+    aws_vpc.main.id
+  ]
+}
+
+# associate subnets with the route table
+resource "aws_route_table_association" "subnet_1_association" {
+  subnet_id = aws_subnet.subnet_1.id
+  route_table_id = aws_route_table.route_table.id
+}
+
+resource "aws_route_table_association" "subnet_2_association" {
+  subnet_id = aws_subnet.subnet_2.id
+  route_table_id = aws_route_table.route_table.id
+}
+
+resource "aws_route_table_association" "subnet_3_association" {
+  subnet_id = aws_subnet.subnet_3.id
+  route_table_id = aws_route_table.route_table.id
+}
+
+# create the eks cluster using terraform module
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 19.0"
+
+  cluster_name    = "discography-cluster"
+  cluster_version = "1.27"
+
+  cluster_addons = {    
+    eks-pod-identity-agent = {
+      most_recent = true
+    }
+  }
+
+  cluster_endpoint_public_access = true
+
+  vpc_id                   = aws_vpc.main.id
+  subnet_ids               = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id, aws_subnet.subnet_3.id]
+  control_plane_subnet_ids = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id, aws_subnet.subnet_3.id]
+
+  eks_managed_node_groups = {
+    green = {
+      min_size       = 1
+      max_size       = 2
+      desired_size   = 1
+      instance_types = ["t2.micro"]
+    }
+
+    depends_on = [
+      aws_vpc.main.id
+    ]  
+  }
+}
+
+# Create service account 
+resource "kubernetes_service_account" "eks_sa" {
+  metadata {
+    name      = "eks-service-account"
+    namespace = "default"    
+  }
+}
+
+#Creates an EKS Pod Identity association between a service account in an Amazon EKS cluster and an IAM role with EKS Pod Identity. 
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["pods.eks.amazonaws.com"]
+    }
+
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
+  }
+}
+
+resource "aws_iam_role" "backend" {
+  name               = "eks-pod-identity-backend"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "disco_s3" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+  role       = aws_iam_role.backend.name
+}
+
+resource "aws_iam_role_policy_attachment" "disco_db" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+  role       = aws_iam_role.backend.name
+}
+
+resource "aws_eks_pod_identity_association" "pod_backend" {
+  cluster_name    = module.eks.cluster_name
+  namespace       = "default"
+  service_account = "eks-service-account"
+  role_arn        = aws_iam_role.backend.arn
+
+  depends_on = [
+    module.eks.cluster_name
+  ]
+}
