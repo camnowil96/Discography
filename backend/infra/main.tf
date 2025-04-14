@@ -203,7 +203,7 @@ resource "aws_route_table_association" "subnet_3_association" {
 # create the eks cluster using terraform module
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.0"
+  version = "~> 20.35.0"
 
   cluster_name    = "discography-cluster"
   cluster_version = "1.27"
