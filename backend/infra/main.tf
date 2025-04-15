@@ -144,21 +144,21 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "subnet_1" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.1.0/24"
-  availability_zone = "us-east-2a"
+  availability_zone = "us-east-1a"
   map_public_ip_on_launch = true  
 }
 
 resource "aws_subnet" "subnet_2" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
-  availability_zone = "us-east-2b"
+  cidr_block = "10.0.3.0/24"
+  availability_zone = "us-east-1b"
   map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "subnet_3" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
-  availability_zone = "us-east-2c"
+  cidr_block = "10.0.5.0/24"
+  availability_zone = "us-east-1c"
   map_public_ip_on_launch = true
 }
 
@@ -203,10 +203,10 @@ resource "aws_route_table_association" "subnet_3_association" {
 # create the eks cluster using terraform module
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.35.0"
+  version = "~> 19.0"
 
   cluster_name    = "discography-cluster"
-  cluster_version = "1.27"
+  cluster_version = "1.28"
 
   cluster_addons = {    
     eks-pod-identity-agent = {
@@ -226,19 +226,30 @@ module "eks" {
       max_size       = 2
       desired_size   = 1
       instance_types = ["t2.micro"]
-    }
-
-    depends_on = [
-      aws_vpc.main
-    ]  
+    }     
   }
 }
 
 # Create service account 
 resource "kubernetes_service_account" "eks_sa" {
+  provider = kubernetes.eks
+
   metadata {
     name      = "eks-service-account"
     namespace = "default"    
+  }
+
+  depends_on = [null_resource.update_kubeconfig]
+}
+
+# Run kubeconfig update 
+resource "null_resource" "update_kubeconfig" {
+  provisioner "local-exec" {
+    command = "aws eks update-kubeconfig --region us-east-1 --name ${module.eks.cluster_name}"
+  }
+
+  triggers = {
+    cluster_name = module.eks.cluster_name
   }
 }
 
@@ -280,7 +291,5 @@ resource "aws_eks_pod_identity_association" "pod_backend" {
   service_account = "eks-service-account"
   role_arn        = aws_iam_role.backend.arn
 
-  depends_on = [
-    module.eks.cluster_name
-  ]
+  depends_on = [module.eks.cluster_name]
 }
