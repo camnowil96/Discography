@@ -10,7 +10,7 @@ export default defineConfig({
     port: 4173
   },
   define: {
-    'process.env.VITE_BACKEND_URL': "http://54.152.188.133:30200"
+    'process.env.VITE_BACKEND_URL': '"http://54.152.188.133:30200"'
   }
 })
 
