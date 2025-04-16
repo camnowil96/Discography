@@ -39,7 +39,7 @@ const AlbumDetailsModal: React.FC<AlbumDetailsProps> = ({ show, onHide, selected
     const fetchAlbumDetails = async () => {
       if (selectedAlbum?.title) {
         try {
-          const response = await axios.get(`http://localhost:8000/album/${selectedAlbum.title}`);
+          const response = await axios.get(`/api/album/${selectedAlbum.title}`);
           setAlbumDetails(response.data);  // Assuming response.data has album details
         } catch (error) {
           console.error("Error fetching album details:", error);

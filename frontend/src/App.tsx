@@ -11,7 +11,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/get_images", {
+        const response = await axios.get("/api/get_images", {
           params: { prefix: "carousel" }  
         });
         setImages(response.data);
