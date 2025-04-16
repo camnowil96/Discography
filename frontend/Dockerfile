@@ -2,6 +2,9 @@
 FROM node:23-alpine3.20 AS build_image
 WORKDIR /app/react-app
 
+# Set the Vite env variable for backend URL
+ENV VITE_BACKEND_URL=http://backend-service:8000
+
 # Copy package files and install all dependencies (including dev dependencies)
 COPY package*.json ./
 RUN npm install
