@@ -15,23 +15,16 @@ RUN npm run build
 
 # Production stage
 FROM node:23-alpine3.20 AS production_image
-WORKDIR /app/react-app
+WORKDIR /app
 
-# Set environment to development to ensure dev dependencies are installed
-ENV NODE_ENV=development
+# Install a lightweight static file server
+RUN npm install -g serve
 
-# Copy package files first
-COPY package*.json ./
+# Copy the built files from the previous stage
+COPY --from=build_image /app/react-app/dist .
 
-# Install dependencies including dev dependencies explicitly
-RUN npm install --include=dev
-
-# Copy the build output and config files needed for preview
-COPY --from=build_image /app/react-app/dist ./dist
-COPY vite.config.ts ./
-
-# Expose the Vite preview port
+# Expose the port serve will listen on
 EXPOSE 4173
 
-# Start the app using Vite's preview mode
-CMD ["npm", "run", "preview"]
+# Start the static file server
+CMD ["serve", "-s", ".", "-l", "4173"]
