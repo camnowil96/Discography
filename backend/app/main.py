@@ -8,8 +8,6 @@ import boto3
 
 app = FastAPI()
 
-Instrumentator().instrument(app).expose(app)
-
 origins = "https://discography.cameronnwilson.com"
 # Enable CORS
 app.add_middleware(
@@ -19,6 +17,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+Instrumentator().instrument(app).expose(app)
 
 #connect to dynamodb
 dynamodb = boto3.resource('dynamodb')
