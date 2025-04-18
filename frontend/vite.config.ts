@@ -7,7 +7,7 @@ export default defineConfig({
 
   preview: {
     host: true,
-    allowedHosts: ["discography.cameronnwilson.com"],
+    allowedHosts: ["https://discography.cameronnwilson.com"],
     port: 4173
   }
 })
