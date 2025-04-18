@@ -88,6 +88,6 @@ async def get_albumdetails(title: str):
     except Exception as e:
         return {"error": str(e)}
 
-@app.get("/get_images", response_model=List[str])
+@app.get("/api/get_images", response_model=List[str])
 async def get_images(prefix: str = Query(..., description="carousel")):
     return get_images_from_s3(prefix)
