@@ -5,7 +5,7 @@ metadata:
   labels:
     app: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -21,22 +21,26 @@ spec:
         ports:
         - containerPort: 8000
         env:
-        - name: AWS_REGION
+        - name: AWS_DEFAULT_REGION
           valueFrom:
             secretKeyRef:
-              name: AWS_REGION
+              name: aws-region
               key: AWS_REGION
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  name: backend-service  
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "8000"
 spec:
-  type: NodePort
+  type: 
   selector:
     app: backend
   ports:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-      NodePort: 30001
+      

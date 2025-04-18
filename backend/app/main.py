@@ -3,9 +3,12 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel 
 from typing import List
+from prometheus_fastapi_instrumentator import Instrumentator
 import boto3
 
 app = FastAPI()
+
+Instrumentator().instrument(app).expose(app)
 
 origins = "https://discography.cameronnwilson.com"
 # Enable CORS

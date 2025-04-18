@@ -20,6 +20,8 @@ markdown-it-py==3.0.0
 MarkupSafe==3.0.2
 mdurl==0.1.2
 orjson==3.10.15
+prometheus-fastapi-instrumentator==7.1.0
+prometheus_client==0.21.1
 pydantic==2.10.6
 pydantic-extra-types==2.10.3
 pydantic-settings==2.8.1

@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: discography-cert
+  namespace: default
+spec:
+  secretName: discography-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: discography.cameronnwilson.com
+  dnsNames:
+  - "discography.cameronnwilson.com"

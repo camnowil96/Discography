@@ -5,7 +5,7 @@ metadata:
   labels:
     app: frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: frontend
@@ -19,17 +19,20 @@ spec:
         image: 051826710466.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
         ports:
         - containerPort: 4173
+        env:
+        - name: BACKEND_URL
+          value: https://discography.cameronnwilson.com/api
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: frontend-service
 spec:
-  type: NodePort
+  type: 
   selector:
     app: frontend
   ports:
     - protocol: TCP
       port: 4173
       targetPort: 4173
-      NodePort: 30000
+      
