@@ -14,7 +14,7 @@ const App: React.FC = () => {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/get_images`, {
           params: { prefix: "carousel" }  
         });
-        setImages(response.data);
+        setImages(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching images:", error);
       }
