@@ -56,7 +56,7 @@ def get_images_from_s3(prefix: str) -> List[str]:
 def test():
     return {"message": "API is reachable"}
 
-@app.get("api/albums", response_model=List[Albums])
+@app.get("/api/albums", response_model=List[Albums])
 async def get_albums():
 	try:
 		response = table.scan()
@@ -71,7 +71,7 @@ async def get_albums():
 		return {"error": str(e)}
 
 
-@app.get("api/album/{title}", response_model=EachAlbum)
+@app.get("/api/album/{title}", response_model=EachAlbum)
 async def get_albumdetails(title: str):
     try:
         response = table.get_item(Key={'title': title})
