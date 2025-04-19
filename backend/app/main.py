@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel 
 from typing import List
+from prometheus_fastapi_instrumentator import Instrumentator
 import boto3
 
 app = FastAPI()
@@ -15,6 +16,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+Instrumentator().instrument(app).expose(app)
 
 #connect to dynamodb
 dynamodb = boto3.resource('dynamodb')
