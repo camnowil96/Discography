@@ -15,7 +15,7 @@ const AlbumGrid: React.FC = () => {
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/albums`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/albums`);
         setAlbums(response.data);  
       } catch (error) {
         console.error("Error fetching albums:", error);
