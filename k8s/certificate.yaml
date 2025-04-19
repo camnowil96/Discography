@@ -10,4 +10,5 @@ spec:
     kind: ClusterIssuer
   commonName: discography.cameronnwilson.com
   dnsNames:
-  - "discography.cameronnwilson.com"
+  - "*.discography.cameronnwilson.com"
+  - discography.cameronnwilson.com

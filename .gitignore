@@ -32,3 +32,11 @@ dist-ssr
 *.tfvars
 
 venv/
+
+discography_cameronnwilson_com.ca-bundle
+discography_cameronnwilson_com.crt
+discography_cameronnwilson_com.key
+fullchain.crt
+package-lock.json
+certificate.yaml
+cluster-issuer.yaml

@@ -6,3 +6,6 @@ prometheusSpec:
     limits:
       memory: "1Gi"
       cpu: "500m" 
+spec:
+  serviceMonitorNamespaceSelector: {}
+  serviceMonitorSelector: {}
