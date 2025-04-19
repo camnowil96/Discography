@@ -52,9 +52,9 @@ def get_images_from_s3(prefix: str) -> List[str]:
     print(f"Type: {type(images)}")        # Confirm it's a list
     return images
 
-@app.get("/")
-def read_root():
-	return {"message": "FastAPI Yuh!"}
+@app.get("/api/test")
+def test():
+    return {"message": "API is reachable"}
 
 @app.get("/albums", response_model=List[Albums])
 async def get_albums():
