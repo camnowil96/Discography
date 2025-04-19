@@ -7,11 +7,10 @@ import boto3
 
 app = FastAPI()
 
-origins = "https://discography.cameronnwilson.com"
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origins], 
+    allow_origins=["https://discography.cameronnwilson.com"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -49,6 +48,8 @@ def get_images_from_s3(prefix: str) -> List[str]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
+    print(f"Returning images: {images}")  # Log what you're returning
+    print(f"Type: {type(images)}")        # Confirm it's a list
     return images
 
 @app.get("/")

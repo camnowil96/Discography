@@ -7,11 +7,18 @@ interface CarouselProps {
 }
 
 const Carousel: React.FC<CarouselProps> = ({ images }) => {
-  // Filter out the image you don't want in the carousel
-  const filteredImages = images.filter((image) => !image.includes("aoty.png"));
-
-  // Get the aoty image separately for setting as background
-  const aotyImage = images.find((image) => image.includes("aoty.png"));
+  // Ensure images is an array before filtering
+  const safeImages = Array.isArray(images) ? images : [];
+  
+  // Now filter the safe array
+  const filteredImages = safeImages.filter((image) => 
+    typeof image === 'string' && !image.includes("aoty.png")
+  );
+  
+  // Get the aoty image safely
+  const aotyImage = safeImages.find((image) => 
+    typeof image === 'string' && image.includes("aoty.png")
+  );
   console.log("AOTY Image URL:", aotyImage);
   return (
     <div className={styles.banner}>
