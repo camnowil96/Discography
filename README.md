@@ -96,8 +96,8 @@ While the project is functional, there are a few areas for improvement:
 
   - Scaling: Fine-tuning the Kubernetes setup to handle higher traffic more efficiently.
 
-  - API Rate Limiting: Implementing rate limiting to preveent the abuse of the API.
-  - 
+  - API Rate Limiting: Implementing rate limiting to prevent the abuse of the API.
+  -  
 ## Project Structure
 ```
 ├── .github
@@ -117,3 +117,99 @@ While the project is functional, there are a few areas for improvement:
 ├──.gitignore           # gitignore file
 └── README.md           # Project documentation              
 ```
+## Usage
+
+### Prerequisites
+Before getting started, make sure the following requirements are met:
+- A registered domain name (used to route external traffic to the application via AWS Elastic Load Balancer and Ingress Controller)
+- Ability to create or update DNS records (you'll need to point your domain to the ELB created by the Ingress NGINX Controller)
+- AWS CLI installed and configured with appropriate credentials
+- Terraform installed locally
+- Kubectl and Helm installed locally
+- Docker installed locally
+- AWS ECR repositories for the frontend and backend images
+
+Note:
+This project assumes an ingress-based setup for routing and TLS termination.
+If a domain is not available, significant changes would be needed — including switching Kubernetes services to NodePort, updating frontend/backend URLs, adjusting CORS settings on the backend, and removing ingress rules — which are outside the intended scope of this project.
+
+To use this project locally:
+
+### 1. Clone the repository:
+```
+git clone https://github.com/camnowil96/beyonce-discography.git
+```
+### 2. Setup Github Actions IAM Role
+   Before deploying infrastructure, you need to manually configure an IAM role that GitHub Actions can assume using OIDC.
+   Rather than duplicating the entire setup process here, you can follow this guide for a detailed walkthrough: <br>
+   ➡️ Official AWS Blog: Configure OIDC and IAM Roles for GitHub Actions <br>
+   Important:
+   - Make sure to restrict the trust relationship to your specific GitHub repository.
+   - Ensure the role has the necessary permissions for Terraform deployments (EKS, S3, IAM, ECR, etc.).
+   - Add the required secrets (AWS_ROLE_TO_ASSUME, AWS_REGION, AWS_ACCOUNT_ID) to your GitHub repo settings. (I hardcoded mine but don't do that!) 
+### 3. Update files
+Update main.tf file to create unique names for s3 bucket, dynamodb table, etc., update region, AZs in subnets, etc. <br>
+Frontend - Update .env file with correct vite backend url (do the same in Dockerfile). <br>
+In backend/app update CORS allow_origins with your domain URL and update the DynamoDB table and S3 bucket names. <br>
+Go through k8s manifests and update where needed. 
+
+### 4. Commit changes and push to master branch.
+This will trigger both workflows - provisioning your infrastructure and building/pushing your docker images to ECR.
+
+## Post-Provisioning Instructions:
+After the EKS cluster and supporting infrastructure have been provisioned via Terraform, a few manual steps are needed to finalize the deployment. Navigate to your k8s folder:
+
+### 1. Update your kubeconfig
+Make sure your local kubeconfig is updated to connect to the new EKS cluster:
+```
+aws eks update-kubeconfig --region <your-region> --name <your-cluster-name>
+```
+(Note: this is also handled by the Terraform local-exec provisioner, but you may want to run it manually if needed.)
+### 2. Install Prometheus for Monitoring
+Add the Prometheus community Helm repo and install the kube-prometheus-stack chart, passing in your custom values:
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus prometheus-community/kube-prometheus-stack -f prom-values.yaml
+```
+### 3. Install Ingress NGINX Controller
+Install the Ingress NGINX Controller via Helm, passing in your customized values:
+```
+helm install ingress-nginx oci://ghcr.io/nginx/charts/nginx-ingress --version 2.1.0 -f values.yaml
+```
+### 4. Create DNS Record in Route53
+Once the Ingress Controller finishes deploying and the ELB is available:
+- Navigate to your Route53 hosted zone.
+- Create a new A Record:
+  - Record type: A - IPv4 address'
+  - Alias: Yes
+  - Alias Target: Select the newly created ELB from the dropdown.
+- Save the record.
+This will associate your domain with the ELB, allowing external traffic to properly route to your Kubernetes cluster.
+
+### 5. Install the remainder of your manifests 
+```
+kubectl apply -f
+```
+### 6. Verify Deployments:
+Ensure all pods are running:
+```
+kubectl get pods -A
+```
+### 7. Access Grafana
+- Find the Grafana admin password:
+```
+kubectl get secret prometheus-grafana -n default -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+- Port-forward Grafana to your local machine:
+```
+kubectl port-forward svc/prometheus-grafana 3000:80
+```
+- Visit http://localhost:3000 and log in with admin and the password retrieved above.
+### 8. Visit your domain name to see working project
+
+## License
+This project is licensed under the MIT License.
+
+## Closing Notes
+This project was a huge learning experience and a lot of fun to build. It combined my love for tech with a little creativity, and helped me strengthen my skills across multiple areas like cloud infrastructure, CI/CD pipelines, and Kubernetes operations. Thanks for taking the time to check it out!
