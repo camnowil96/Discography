@@ -1,21 +1,21 @@
 # Beyoncé Discography Project
 ## Table of Contents
-- Introduction
-- Architecture Overview
-- Frontend (Vite/React)
-- Backend (FastAPI)
-- Infrastructure as Code (Terraform)
-- Containerization (Docker)
-- CI/CD Pipeline (GitHub Actions)
-- Kubernetes Deployment (EKS)
-- Monitoring (Prometheus & Grafana)
-- TLS and Certificate Management
-- Authentication and IAM Roles
-- Future Improvements
-- Project Structure
-- Usage
-- License
-- Closing Notes
+- [Introduction](https://github.com/camnowil96/Discography?tab=readme-ov-file#introduction)
+- [Architecture Overview](https://github.com/camnowil96/Discography?tab=readme-ov-file#architecture-overview)
+- [Frontend (Vite/React)](https://github.com/camnowil96/Discography?tab=readme-ov-file#frontend-vitereact)
+- [Backend (FastAPI)](https://github.com/camnowil96/Discography?tab=readme-ov-file#backend-fastapi)
+- [Infrastructure as Code (Terraform)](https://github.com/camnowil96/Discography?tab=readme-ov-file#infrastructure-as-code-terraform)
+- [Containerization (Docker)](https://github.com/camnowil96/Discography?tab=readme-ov-file#containerization-docker)
+- [CI/CD Pipeline (GitHub Actions)](https://github.com/camnowil96/Discography?tab=readme-ov-file#cicd-pipeline-github-actions)
+- [Kubernetes Deployment (EKS)](https://github.com/camnowil96/Discography?tab=readme-ov-file#kubernetes-deployment-eks)
+- [Monitoring (Prometheus & Grafana)](https://github.com/camnowil96/Discography?tab=readme-ov-file#monitoring-prometheus--grafana)
+- [TLS and Certificate Management](https://github.com/camnowil96/Discography?tab=readme-ov-file#tls-and-certificate-management)
+- [Authentication and IAM Roles](https://github.com/camnowil96/Discography?tab=readme-ov-file#authentication-and-iam-roles)
+- [Future Improvements](https://github.com/camnowil96/Discography?tab=readme-ov-file#future-improvements)
+- [Project Structure](https://github.com/camnowil96/Discography?tab=readme-ov-file#project-structure)
+- [Usage](https://github.com/camnowil96/Discography?tab=readme-ov-file#usage)
+- [License](https://github.com/camnowil96/Discography?tab=readme-ov-file#license)
+- [Closing Notes](https://github.com/camnowil96/Discography?tab=readme-ov-file#closing-notes)
 
 ## Introduction
 
